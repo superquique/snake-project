@@ -1,0 +1,29 @@
+body {
+    background-color:lightgreen;
+    margin: 0;
+
+    
+}
+
+
+#game-board {
+    background-color: black;
+
+    position: relative;
+
+    width: 700px;
+    height: 700px;
+
+    margin: auto;
+}
+
+.segment {
+    background-color: white;
+
+    position:absolute;
+
+    width: 25px;
+    height: 25px;
+
+    text-align: center;
+}

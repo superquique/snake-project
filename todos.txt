@@ -1,0 +1,11 @@
+<--- Snake TODO list --->
+
+**** Monday March 2nd: ***
+
+Todays Goals: 
+    1. Implement snake movement
+        a) #TODO: Make Snake class (✅)
+        b) #TODO: Make Block class (✅)
+        c) #TODO: Make snake move automatically (⚠️)
+            c.1): #TODO Correct bug for when snake moves in zig-zag.
+        b) #TODO: Make snake change direction on user input
