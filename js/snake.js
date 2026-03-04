@@ -7,10 +7,6 @@ export class Snake {
         return this.segments;
     }
 
-    getSegmentAt (index) {
-        return this.segments[index];
-    }
-
     getHead () {
         return this.segments[0];
     }
@@ -164,30 +160,6 @@ export class Segment {
         this.element = null;
 
         this.createDomElement();
-    }
-
-    getCoordinateX () {
-        return this.coordinateX;
-    }
-
-    getCoordinateY () {
-        return this.coordinateY;
-    }
-
-    getDirection () {
-        return this.direction;
-    }
-
-    setCoordinateX (coordinate) {
-        this.coordinateX = coordinate;
-    }
-
-    setCoordinateY (coordinate) {
-        this.coordinateY = coordinate;
-    } 
-
-    setDirection (direction) {
-        this.direction = direction;
     }
 
     createDomElement () {
