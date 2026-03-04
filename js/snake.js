@@ -26,29 +26,33 @@ export class Snake {
 
     turnRight () {
         const head = this.getHead();
-
-        if (head.direction === "up") {
+        
+        if (head.direction !== "left") {
             head.direction = "right";
-        } else if (head.direction === "down") {
-            head.direction = "left";
-        } else if (head.direction === "left") {
-            head.direction = "up";
-        } else if (head.direction === "right") {
-            head.direction = "down";
         }
     }
 
     turnLeft () {
         const head = this.getHead();
 
-        if (head.direction === "up") {
+        if (head.direction !== "right") {
             head.direction = "left";
-        } else if (head.direction === "down") {
-            head.direction = "right";
-        } else if (head.direction === "left") {
-            head.direction = "down";
-        } else if (head.direction === "right") {
+        }
+    }
+
+    turnUp () {
+        const head = this.getHead();
+
+        if (head.direction !== "down") {
             head.direction = "up";
+        }
+    }
+
+    turnDown () {
+        const head = this.getHead();
+
+        if (head.direction !== "up") {
+            head.direction = "down";
         }
     }
 

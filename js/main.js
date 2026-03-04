@@ -3,15 +3,18 @@ import { Edible } from "./edible.js";
 
 const segmentWidth = 25;
 const segmentHeight = 25;
-const boardWidth = 700;
-const boardHeight = 700;
+const boardWidth = 600;
+const boardHeight = 600;
 let coordinateX = 5;
 let coordinateY = Math.floor(boardHeight / 25 / 2);
 
 const gameBoard = document.getElementById("game-board");
+const boardHeader = document.getElementById("board-header");
 
 gameBoard.style.width = boardWidth + "px";
 gameBoard.style.height = boardHeight + "px";
+
+boardHeader.style.width = boardWidth + "px";
 
 const head = new Segment(coordinateX, coordinateY, segmentWidth, segmentHeight, "right", 0);
 const snake = new Snake(head);
@@ -81,36 +84,12 @@ const interval = setInterval(() => {
 
 document.addEventListener("keydown", (event) => {
     if (event.code === "ArrowRight") {
-        if (snake.getHead().direction === "up") {
-            snake.turnRight();
-            
-        } else if (snake.getHead().direction === "down") {
-            snake.turnLeft();
-            
-        }
+        snake.turnRight();
     } else if (event.code === "ArrowLeft") {
-        if (snake.getHead().direction === "up") {
-            snake.turnLeft();
-            
-        } else if (snake.getHead().direction === "down") {
-            snake.turnRight();
-           
-        }
+        snake.turnLeft();
     } else if (event.code === "ArrowUp") {
-        if (snake.getHead().direction === "left") {
-            snake.turnRight();
-            
-        } else if (snake.getHead().direction === "right") {
-            snake.turnLeft();
-            
-        }
+        snake.turnUp();
     } else if (event.code === "ArrowDown") {
-        if (snake.getHead().direction === "left") {
-            snake.turnLeft();
-           
-        } else if (snake.getHead().direction === "right") {
-            snake.turnRight();
-            
-        }
+        snake.turnDown();
     }    
 });
