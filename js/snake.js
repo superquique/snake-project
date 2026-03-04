@@ -3,10 +3,6 @@ export class Snake {
         this.segments = [head];
     }
 
-    getAllSegments () {
-        return this.segments;
-    }
-
     getHead () {
         return this.segments[0];
     }

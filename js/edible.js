@@ -9,14 +9,6 @@ export class Edible {
         this.createDomElement();
     }
 
-    setCoordinateX (coordinate) {
-        this.coordinateX = coordinate;
-    }
-
-    setCoordinateY (coordinate) {
-        this.coordinateY = coordinate;
-    } 
-
     createDomElement () {
         const gameBoard = document.getElementById("game-board");
         this.element = document.createElement("div");

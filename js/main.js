@@ -26,7 +26,7 @@ for (let i = 0; i<2; i++) {
     snake.addSegment(newSegment);
 }
 
-console.log(snake.getAllSegments());
+console.log(snake.segments);
 
 const edible = new Edible(coordinateX + 15, coordinateY, segmentWidth, segmentHeight);
 
@@ -34,7 +34,7 @@ const interval = setInterval(() => {
     // Detect collisions with other segments
     let willCollideWithItself = false;
 
-    const allSnakeSegments = snake.getAllSegments();
+    const allSnakeSegments = snake.segments;
 
     for (let i = 1; i < allSnakeSegments.length; i++) {
         const currentSegment = allSnakeSegments[i];
@@ -68,15 +68,15 @@ const interval = setInterval(() => {
         // Make snake grow one segment
         console.log(snake.getTail());
         const tail = snake.getTail();
-        let newSegment = new Segment(tail.coordinateX, tail.coordinateY, segmentWidth, segmentHeight, null, snake.getAllSegments().length);
+        let newSegment = new Segment(tail.coordinateX, tail.coordinateY, segmentWidth, segmentHeight, null, snake.segments.length);
         snake.addSegment(newSegment);
 
         // Change edible position
         const newCoordinateX = Math.floor(Math.random() * boardWidth/segmentWidth);
         const newCoordinateY = Math.floor(Math.random() * boardHeight/segmentHeight);
 
-        edible.setCoordinateX(newCoordinateX);
-        edible.setCoordinateY(newCoordinateY);
+        edible.coordinateX = newCoordinateX;
+        edible.coordinateY = newCoordinateY;
         edible.updateUI();
     }
 
