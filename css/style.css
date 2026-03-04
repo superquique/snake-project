@@ -4,15 +4,25 @@ body {
 
     height: 100vh;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 
 #game-board {
     background-color: black;
-
     position: relative;
+}
 
-    margin: auto;
+#board-header {
+    background-color: goldenrod;
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
 }
 
 .segment {

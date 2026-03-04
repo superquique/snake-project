@@ -1,20 +1,25 @@
 import { Snake, Segment } from "./snake.js";
 import { Edible } from "./edible.js";
 
+
 const segmentWidth = 25;
 const segmentHeight = 25;
 const boardWidth = 600;
 const boardHeight = 600;
 let coordinateX = 5;
 let coordinateY = Math.floor(boardHeight / 25 / 2);
+let score = 0;
 
 const gameBoard = document.getElementById("game-board");
 const boardHeader = document.getElementById("board-header");
+const scoreDisplay = document.getElementById("score-display");
 
 gameBoard.style.width = boardWidth + "px";
 gameBoard.style.height = boardHeight + "px";
 
 boardHeader.style.width = boardWidth + "px";
+
+scoreDisplay.innerText = `${score}`;
 
 const head = new Segment(coordinateX, coordinateY, segmentWidth, segmentHeight, "right", 0);
 const snake = new Snake(head);
@@ -70,6 +75,10 @@ const interval = setInterval(() => {
         const tail = snake.getTail();
         let newSegment = new Segment(tail.coordinateX, tail.coordinateY, segmentWidth, segmentHeight, null, snake.segments.length);
         snake.addSegment(newSegment);
+
+        // Update score
+        score++;
+        scoreDisplay.innerText = `${score}`;
 
         // Change edible position
         const newCoordinateX = Math.floor(Math.random() * boardWidth/segmentWidth);
