@@ -190,6 +190,8 @@ export class Segment {
         const gameBoard = document.getElementById("game-board");
         this.element = document.createElement("div");
         this.element.classList.add("segment");
+        this.element.style.width = this.width + "px";
+        this.element.style.height = this.height + "px";
         this.element.style.left = this.coordinateX * this.width + "px";
         this.element.style.bottom = this.coordinateY * this.height + "px";
         this.element.innerText = this.index;

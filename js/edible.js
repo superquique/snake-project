@@ -29,6 +29,8 @@ export class Edible {
         const gameBoard = document.getElementById("game-board");
         this.element = document.createElement("div");
         this.element.classList.add("edible");
+        this.element.style.width = this.width + "px";
+        this.element.style.height = this.height + "px";
         this.element.style.left = this.coordinateX * this.width + "px";
         this.element.style.bottom = this.coordinateY * this.height + "px";
         gameBoard.appendChild(this.element);
