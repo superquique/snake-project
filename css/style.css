@@ -27,3 +27,14 @@ body {
 
     text-align: center;
 }
+
+.edible {
+    background-color: greenyellow;
+
+    position: absolute;
+
+    width: 25px;
+    height: 25px;
+
+    text-align: center;
+}

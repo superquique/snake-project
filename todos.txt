@@ -5,7 +5,22 @@
 Todays Goals: 
     1. Implement snake movement
         a) #TODO: Make Snake class (✅)
-        b) #TODO: Make Block class (✅)
-        c) #TODO: Make snake move automatically (⚠️)
-            c.1): #TODO Correct bug for when snake moves in zig-zag.
-        b) #TODO: Make snake change direction on user input
+        b) #TODO: Make Segment class (✅)
+        c) #TODO: Make snake move automatically (✅)
+            c.1): #TODO Correct bug for when snake moves in zig-zag (✅)
+        b) #TODO: Make snake change direction on user input (✅)
+
+
+
+*** Tuesday March 3rd: ***
+
+Today's Goals:
+    1. Implement collisions
+        a) #TODO: Make game end when snake collides with walls (✅)
+        b) #TODO: Make game end when snake collides with it's own (✅)
+
+    2. Implement snake lengthen when eating edibles
+        a) #TODO: Make an object appear when game starts (✅)
+        b) #TODO: Make snake grow 1 segment when colliding with edibles (✅)
+        c) #TODO: Make a new edible appear every time snake eats one edible (✅)
+            c.1) #TODO: IMPROVEMENT Make edible appear outside snake

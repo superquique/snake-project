@@ -15,6 +15,10 @@ export class Snake {
         return this.segments[0];
     }
 
+    getTail () {
+        return this.segments.slice(-1)[0];
+    }
+
     addSegment (segment) {
         this.segments.push(segment);
         segment.updateUI();
@@ -49,38 +53,97 @@ export class Snake {
     }
 
     advance () {
-        this.segments.forEach((segment, index, arr) => {
+        // Pass the coords from previous segment
+        for (let i=this.segments.length - 1; i > 0; i--) {
+            const currentSegment = this.segments[i];
+            const previousSegment = this.segments[i-1]
+            currentSegment.coordinateX = previousSegment.coordinateX;
+            currentSegment.coordinateY = previousSegment.coordinateY;
+        }
 
-            // Advance segment by 1 unit
-            if (segment.direction === "right") {
-                segment.coordinateX++;
-            } else if (segment.direction === "left") {
-                segment.coordinateX--;
-            } else if(segment.direction === "up") {
-                segment.coordinateY++;
-            } else if (segment.direction === "down") {
-                segment.coordinateY--;
-            }
+        // Advance head by 1 unit
+        const head = this.getHead();
 
-            
-            // Pass the direction from previous segment
-            if (index > 0) {
-                if (segment.direction === "right" || segment.direction === "left") {
-                    if ( segment.coordinateX === arr[index - 1].coordinateX
-                        && segment.direction !== arr[index - 1].direction
-                    ) {
-                        segment.direction = arr[index - 1].direction;
-                    }
-                } else 
-                if (segment.direction === "down" || segment.direction === "up") {
-                    if ( segment.coordinateY === arr[index - 1].coordinateY
-                        && segment.direction !== arr[index - 1].direction
-                    ) {
-                        segment.direction = arr[index - 1].direction;
-                    }
-                }
-            }
-            
+        if (head.direction === "right") {
+            head.coordinateX++;
+        } else if (head.direction === "left") {
+            head.coordinateX--;
+        } else if(head.direction === "up") {
+            head.coordinateY++;
+        } else if (head.direction === "down") {
+            head.coordinateY--;
+        }
+
+        this.draw();
+           
+    }
+
+    isCollidingWith (coordinateX, coordinateY) {
+        return this.isCollidingWithX(coordinateX) && this.isCollidingWithY(coordinateY); 
+    }
+
+    isCollidingWithX (coordinateX) {
+        const head = this.getHead();
+
+        if(head.coordinateX === coordinateX) {
+            return true;
+        }
+
+        return false;
+    }
+
+    isCollidingWithY (coordinateY) {
+        const head = this.getHead();
+
+        if(head.coordinateY === coordinateY) {
+            return true;
+        }
+
+        return false;
+    }
+
+    willCollideWith (coordinateX, coordinateY) {
+        const head = this.getHead();
+
+        if (head.direction === "right"){
+            return head.coordinateX + 1 === coordinateX && head.coordinateY === coordinateY;
+        } else if (head.direction === "left") {
+            return head.coordinateX - 1 === coordinateX && head.coordinateY === coordinateY;
+        } else if (head.direction === "up") {
+            return head.coordinateY + 1 === coordinateY && head.coordinateX === coordinateX;
+        } else if (head.direction === "down") {
+            return head.coordinateY - 1 === coordinateY && head.coordinateX === coordinateX;
+        }
+
+        return false;
+    }
+    
+    willCollideWithX(coordinateX) {
+        const head = this.getHead();
+
+        if(head.direction === "right" && head.coordinateX + 1 === coordinateX) {
+            return true;
+        } else if (head.direction === "left" && head.coordinateX - 1 === coordinateX){
+            return true;
+        }
+
+        return false;
+    }
+
+    willCollideWithY(coordinateY) {
+        const head = this.getHead();
+
+        if(head.direction === "up" && head.coordinateY + 1 === coordinateY) {
+            return true;
+        } else if (head.direction === "down" && head.coordinateY - 1 === coordinateY){
+            return true;
+        }
+
+        return false;
+    }
+
+    draw () {
+        this.segments.forEach((segment) => {
             segment.updateUI();
         });
     }
@@ -112,11 +175,11 @@ export class Segment {
     }
 
     setCoordinateX (coordinate) {
-        this.coordinateX = position;
+        this.coordinateX = coordinate;
     }
 
     setCoordinateY (coordinate) {
-        this.coordinateY = position;
+        this.coordinateY = coordinate;
     } 
 
     setDirection (direction) {
