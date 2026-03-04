@@ -2,103 +2,140 @@ import { Snake, Segment } from "./snake.js";
 import { Edible } from "./edible.js";
 
 
-const segmentWidth = 25;
-const segmentHeight = 25;
-const boardWidth = 600;
-const boardHeight = 600;
-let coordinateX = 5;
-let coordinateY = Math.floor(boardHeight / 25 / 2);
-let score = 0;
+class Game {
 
-const gameBoard = document.getElementById("game-board");
-const boardHeader = document.getElementById("board-header");
-const scoreDisplay = document.getElementById("score-display");
+    constructor (boardWidth, boardHeight, segmentWidth, segmentHeight) {
+        this.boardWidth = boardWidth;
+        this.boardHeight = boardHeight;
+        this.segmentWidth = segmentWidth;
+        this.segmentHeight = segmentHeight;
+        this.score = 0;
+        this.snake = null;
+        this.edible = null;
+        this.scoreDisplay = null;
+        this.interval = null;
 
-gameBoard.style.width = boardWidth + "px";
-gameBoard.style.height = boardHeight + "px";
+        this.initializeGame();
+    }
 
-boardHeader.style.width = boardWidth + "px";
+    initializeGame () {
+        const gameBoard = document.getElementById("game-board");
+        gameBoard.style.width = this.boardWidth + "px";
+        gameBoard.style.height = this.boardHeight + "px";
+        
+        const boardHeader = document.getElementById("board-header");
+        boardHeader.style.width = this.boardWidth + "px";
 
-scoreDisplay.innerText = `${score}`;
+        this.score = 0;
+        
+        this.scoreDisplay = document.getElementById("score-display");
 
-const head = new Segment(coordinateX, coordinateY, segmentWidth, segmentHeight, "right", 0);
-const snake = new Snake(head);
+        this.scoreDisplay.innerText = `${this.score}`;
 
-for (let i = 0; i<2; i++) {
-    coordinateX--;
+        let coordinateX = 5;
+        const coordinateY = Math.floor(this.boardHeight / 25 / 2);
+        
+        const head = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, "right", 0);
+        
+        this.snake = new Snake(head);
+        this.edible = new Edible(coordinateX + 15, coordinateY, this.segmentWidth, this.segmentHeight);
 
-    let newSegment = new Segment(coordinateX, coordinateY, segmentWidth, segmentHeight, null, i+1);
-    snake.addSegment(newSegment);
-}
+        for (let i = 0; i<2; i++) {
+            coordinateX--;
 
-console.log(snake.segments);
-
-const edible = new Edible(coordinateX + 15, coordinateY, segmentWidth, segmentHeight);
-
-const interval = setInterval(() => {
-    // Detect collisions with other segments
-    let willCollideWithItself = false;
-
-    const allSnakeSegments = snake.segments;
-
-    for (let i = 1; i < allSnakeSegments.length; i++) {
-        const currentSegment = allSnakeSegments[i];
-        if (snake.willCollideWith(currentSegment.coordinateX, currentSegment.coordinateY)) {
-            willCollideWithItself = true;
-            break;
+            let newSegment = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, null, i+1);
+            this.snake.addSegment(newSegment);
         }
     }
 
-    // Detect collisions with itself
-    if (willCollideWithItself) {
-        clearInterval(interval);
+    start () {
+        this.interval = setInterval(() => {
+            // Detect collisions with other segments
+            let willCollideWithItself = false;
+
+            const allSnakeSegments = this.snake.segments;
+
+            for (let i = 1; i < allSnakeSegments.length; i++) {
+                const currentSegment = allSnakeSegments[i];
+                if (this.snake.willCollideWith(currentSegment.coordinateX, currentSegment.coordinateY)) {
+                    willCollideWithItself = true;
+                    break;
+                }
+            }
+
+            // Detect collisions with itself
+            if (willCollideWithItself) {
+                clearInterval(this.interval);
+            }
+            // Detect collisions with board boundaries
+            else if (this.snake.willCollideWithX(this.boardWidth/this.segmentWidth)) {
+                clearInterval(this.interval);
+            } else if (this.snake.willCollideWithX(-1)) {
+                clearInterval(this.interval);
+            } else if(this.snake.willCollideWithY(this.boardHeight/this.segmentHeight)) {
+                clearInterval(this.interval);
+            } else if (this.snake.willCollideWithY(-1)) {
+                clearInterval(this.interval);
+            } else {
+                this.snake.advance();
+            }
+
+            // Detect collisions with edible
+            if (this.snake.isCollidingWith(this.edible.coordinateX, this.edible.coordinateY)) {
+                
+                // Make snake grow one segment
+                this.growSnake();
+
+                // Update score
+                this.augmentScore();
+
+                // Change edible position
+                const newCoordinateX = Math.floor(Math.random() * this.boardWidth/this.segmentWidth);
+                const newCoordinateY = Math.floor(Math.random() * this.boardHeight/this.segmentHeight);
+
+                this.edible.coordinateX = newCoordinateX;
+                this.edible.coordinateY = newCoordinateY;
+
+                // Update game UI state
+                this.updateUI();
+            }
+
+        }, 200);
     }
-    // Detect collisions with board boundaries
-    else if (snake.willCollideWithX(boardWidth/segmentWidth)) {
-        clearInterval(interval);
-    } else if (snake.willCollideWithX(-1)) {
-        clearInterval(interval);
-    } else if(snake.willCollideWithY(boardHeight/segmentHeight)) {
-        clearInterval(interval);
-    } else if (snake.willCollideWithY(-1)) {
-        clearInterval(interval);
-    } else {
-        snake.advance();
+
+    augmentScore (points = 1) {
+        this.score++;
     }
 
-    // Detect collisions with edible
-    if (snake.isCollidingWith(edible.coordinateX, edible.coordinateY)) {
-        console.log("mmm yummy yummy");
-
-        // Make snake grow one segment
-        console.log(snake.getTail());
-        const tail = snake.getTail();
-        let newSegment = new Segment(tail.coordinateX, tail.coordinateY, segmentWidth, segmentHeight, null, snake.segments.length);
-        snake.addSegment(newSegment);
-
-        // Update score
-        score++;
-        scoreDisplay.innerText = `${score}`;
-
-        // Change edible position
-        const newCoordinateX = Math.floor(Math.random() * boardWidth/segmentWidth);
-        const newCoordinateY = Math.floor(Math.random() * boardHeight/segmentHeight);
-
-        edible.coordinateX = newCoordinateX;
-        edible.coordinateY = newCoordinateY;
-        edible.updateUI();
+    growSnake () {
+        const tail = this.snake.getTail();
+        let newSegment = new Segment(tail.coordinateX, tail.coordinateY, this.segmentWidth, this.segmentHeight, null, this.snake.segments.length);
+        this.snake.addSegment(newSegment);
     }
 
-}, 200);
+    updateUI () {
+        this.scoreDisplay.innerText = `${this.score}`;
+        this.edible.updateUI();
+    }
+}
+
+const game = new Game(600, 600, 25, 25);
 
 document.addEventListener("keydown", (event) => {
+    if (
+        (event.code === "ArrowUp" ||
+        event.code === "ArrowRight" || 
+        event.code === "ArrowDown") && !game.interval) {
+        game.start();
+    }
+
     if (event.code === "ArrowRight") {
-        snake.turnRight();
+        game.snake.turnRight();
     } else if (event.code === "ArrowLeft") {
-        snake.turnLeft();
+        game.snake.turnLeft();
     } else if (event.code === "ArrowUp") {
-        snake.turnUp();
+        game.snake.turnUp();
     } else if (event.code === "ArrowDown") {
-        snake.turnDown();
+        game.snake.turnDown();
     }    
 });
