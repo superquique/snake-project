@@ -14,17 +14,29 @@ class Game {
         this.edible = null;
         this.scoreDisplay = null;
         this.interval = null;
+        this.ready = false;
 
         this.initializeGame();
     }
 
     initializeGame () {
+        if (this.snake) {
+            this.snake.clearAllSegments();
+        }
+
+        if (this.edible) {
+            this.edible.removeDomElement();
+        }
+
         const gameBoard = document.getElementById("game-board");
         gameBoard.style.width = this.boardWidth + "px";
         gameBoard.style.height = this.boardHeight + "px";
         
         const boardHeader = document.getElementById("board-header");
         boardHeader.style.width = this.boardWidth + "px";
+    
+        const gameoverOverlay = document.getElementById("gameover-overlay");
+        gameoverOverlay.classList.add("hidden");
 
         this.score = 0;
         
@@ -46,38 +58,46 @@ class Game {
             let newSegment = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, null, i+1);
             this.snake.addSegment(newSegment);
         }
+
+        this.ready = true;
     }
 
     start () {
         this.interval = setInterval(() => {
             // Detect collisions with other segments
-            let willCollideWithItself = false;
+            let collisionDetected = false;
 
             const allSnakeSegments = this.snake.segments;
 
+            // Detect collisions with itself
             for (let i = 1; i < allSnakeSegments.length; i++) {
                 const currentSegment = allSnakeSegments[i];
                 if (this.snake.willCollideWith(currentSegment.coordinateX, currentSegment.coordinateY)) {
-                    willCollideWithItself = true;
+                    collisionDetected = true;
                     break;
                 }
             }
 
-            // Detect collisions with itself
-            if (willCollideWithItself) {
-                clearInterval(this.interval);
-            }
             // Detect collisions with board boundaries
-            else if (this.snake.willCollideWithX(this.boardWidth/this.segmentWidth)) {
-                clearInterval(this.interval);
+            if (this.snake.willCollideWithX(this.boardWidth/this.segmentWidth)) {
+                collisionDetected = true;
             } else if (this.snake.willCollideWithX(-1)) {
-                clearInterval(this.interval);
+                collisionDetected = true;
             } else if(this.snake.willCollideWithY(this.boardHeight/this.segmentHeight)) {
-                clearInterval(this.interval);
+                collisionDetected = true;
             } else if (this.snake.willCollideWithY(-1)) {
-                clearInterval(this.interval);
+                collisionDetected = true;
             } else {
                 this.snake.advance();
+            }
+
+            // Gameover on collision detection
+            if (collisionDetected) {
+                clearInterval(this.interval);
+                this.interval = null;
+                this.ready = false;
+                const gameoverOverlay = document.getElementById("gameover-overlay");
+                gameoverOverlay.classList.remove("hidden");
             }
 
             // Detect collisions with edible
@@ -121,11 +141,20 @@ class Game {
 
 const game = new Game(600, 600, 25, 25);
 
+const replayButton = document.getElementById("replay-button");
+
+replayButton.addEventListener("click", (event) => {
+    game.initializeGame();
+})
+
 document.addEventListener("keydown", (event) => {
+    console.log("still listening");
+    console.log("game interval", game.interval);
+    
     if (
         (event.code === "ArrowUp" ||
         event.code === "ArrowRight" || 
-        event.code === "ArrowDown") && !game.interval) {
+        event.code === "ArrowDown") && game.interval === null && game.ready) {
         game.start();
     }
 

@@ -16,6 +16,13 @@ export class Snake {
         segment.updateUI();
     }
 
+    clearAllSegments () {
+        this.segments.forEach((segment) => {
+            segment.removeDomElement();
+        })
+        this.segments = null;
+    }
+
     turnRight () {
         const head = this.getHead();
         
@@ -168,7 +175,12 @@ export class Segment {
         this.element.style.bottom = this.coordinateY * this.height + "px";
         this.element.innerText = this.index;
         gameBoard.appendChild(this.element);
+    }
 
+    removeDomElement () {
+        const gameBoard = document.getElementById("game-board");
+        gameBoard.removeChild(this.element);
+        this.element = null;
     }
 
     updateUI () {

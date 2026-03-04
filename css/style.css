@@ -25,6 +25,31 @@ body {
     
 }
 
+#gameover-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#gameover-content {
+    background-color: white;
+    width: 20%;
+    height: 40%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
 .segment {
     background-color: white;
 
@@ -39,4 +64,8 @@ body {
     position: absolute;
 
     text-align: center;
+}
+
+.hidden {
+    display: none !important;
 }

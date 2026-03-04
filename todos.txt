@@ -24,3 +24,39 @@ Today's Goals:
         b) #TODO: Make snake grow 1 segment when colliding with edibles (✅)
         c) #TODO: Make a new edible appear every time snake eats one edible (✅)
             c.1) #TODO: IMPROVEMENT Make edible appear outside snake
+
+
+
+*** Wednesday  March 4th ***
+
+Today's Goals:
+    0. Refactor
+        a) #TODO: Refactor turn functions and key listeners (✅)
+        b) #TODO: Remove unused methods (✅)
+        c) #TODO: Access class properties directly (✅)
+
+    1. Implement score count
+        a) #TODO: Create element to hold score (✅)
+        b) #TODO: Update score each time snake eats one edible (✅)
+
+    2. Implement game start controlled by user
+        a) #TODO: Make Game class (Refactor main.js) (✅)
+        a) #TODO: Make game start when user presses an arrow key (✅)
+
+    3. Implement restart on gameover
+        a) #TODO: Create gameover overlay and hide it by default (✅)
+        b) #TODO: Make overlay appear on gameover (✅)
+        c) #TODO: Make button restart game when clicked (✅)
+
+    4. Implement personal best
+        a) #TODO: Add personal best display to board (📍)
+        a) #TODO: Update personal best on gameover if beaten
+        b) #TODO: Show the personal best was beaten (if so) on gameover
+
+
+
+Feedback comments: 
+    1. Refactor turning functions
+    2. Remove unused methods
+    3. Access class properties directly
+    4. Refactor main to Game class

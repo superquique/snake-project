@@ -18,7 +18,12 @@ export class Edible {
         this.element.style.left = this.coordinateX * this.width + "px";
         this.element.style.bottom = this.coordinateY * this.height + "px";
         gameBoard.appendChild(this.element);
+    }
 
+    removeDomElement () {
+        const gameBoard = document.getElementById("game-board");
+        gameBoard.removeChild(this.element);
+        this.element = null;
     }
 
     updateUI () {
