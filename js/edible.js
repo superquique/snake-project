@@ -9,14 +9,6 @@ export class Edible {
         this.createDomElement();
     }
 
-    getCoordinateX () {
-        return this.coordinateX;
-    }
-
-    getCoordinateY () {
-        return this.coordinateY;
-    }
-
     setCoordinateX (coordinate) {
         this.coordinateX = coordinate;
     }
