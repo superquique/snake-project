@@ -173,7 +173,6 @@ export class Segment {
         this.element.style.height = this.height + "px";
         this.element.style.left = this.coordinateX * this.width + "px";
         this.element.style.bottom = this.coordinateY * this.height + "px";
-        this.element.innerText = this.index;
         gameBoard.appendChild(this.element);
     }
 

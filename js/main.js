@@ -10,9 +10,11 @@ class Game {
         this.segmentWidth = segmentWidth;
         this.segmentHeight = segmentHeight;
         this.score = 0;
+        this.personalBest = 0;
         this.snake = null;
         this.edible = null;
         this.scoreDisplay = null;
+        this.pbDisplay = null;
         this.interval = null;
         this.ready = false;
 
@@ -41,8 +43,10 @@ class Game {
         this.score = 0;
         
         this.scoreDisplay = document.getElementById("score-display");
+        this.pbDisplay = document.getElementById("pb-display");
 
         this.scoreDisplay.innerText = `${this.score}`;
+        this.pbDisplay.innerText = `${this.personalBest}`;
 
         let coordinateX = 5;
         const coordinateY = Math.floor(this.boardHeight / 25 / 2);
@@ -96,6 +100,13 @@ class Game {
                 clearInterval(this.interval);
                 this.interval = null;
                 this.ready = false;
+                
+                const scoreDisplayGameover = document.getElementById("score-display-gameover");
+                scoreDisplayGameover.innerText = this.score;
+
+                const pbDisplayGameover = document.getElementById("pb-display-gameover");
+                pbDisplayGameover.innerText = this.personalBest;
+
                 const gameoverOverlay = document.getElementById("gameover-overlay");
                 gameoverOverlay.classList.remove("hidden");
             }
@@ -120,11 +131,15 @@ class Game {
                 this.updateUI();
             }
 
-        }, 200);
+        }, 120);
     }
 
     augmentScore (points = 1) {
         this.score++;
+
+        if (this.score > this.personalBest) {
+            this.personalBest = this.score;
+        }
     }
 
     growSnake () {
@@ -135,6 +150,7 @@ class Game {
 
     updateUI () {
         this.scoreDisplay.innerText = `${this.score}`;
+        this.pbDisplay.innerText = `${this.personalBest}`;
         this.edible.updateUI();
     }
 }
