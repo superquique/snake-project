@@ -13,7 +13,6 @@ export class Snake {
 
     addSegment (segment) {
         this.segments.push(segment);
-        segment.updateUI();
     }
 
     clearAllSegments () {
@@ -62,6 +61,7 @@ export class Snake {
             const previousSegment = this.segments[i-1]
             currentSegment.coordinateX = previousSegment.coordinateX;
             currentSegment.coordinateY = previousSegment.coordinateY;
+            currentSegment.direction = previousSegment.direction;
         }
 
         // Advance head by 1 unit
@@ -146,33 +146,53 @@ export class Snake {
     }
 
     draw () {
-        this.segments.forEach((segment) => {
-            segment.updateUI();
+        this.segments.forEach((segment, index, arr) => {
+            if (segment.element === null) {
+                segment.createDomElement();
+            }
+
+            if (index === 0) {
+                segment.updateUI("head");
+            } else if (index < arr.length - 1) {
+                const prev = arr[index - 1];
+                const next = arr[index + 1];
+
+                // Calcualte signature
+                const sigX = (prev.coordinateX - segment.coordinateX) + 
+                    (next.coordinateX - segment.coordinateX);
+
+                const sigY = (prev.coordinateY - segment.coordinateY) + 
+                    (next.coordinateY - segment.coordinateY);
+
+                const signature = `${sigX},${sigY}`;
+
+                if (signature === "0,0") {
+                    segment.updateUI("segment");
+                } else {
+                    segment.updateUI("corner", signature);
+                }
+            } else {
+                segment.updateUI("tail");
+            }
         });
     }
 }
 
 export class Segment {
-    constructor (coordinateX, coordinateY, width, height, direction, index) {
+    constructor (coordinateX, coordinateY, width, height, direction) {
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;
         this.width = width;
         this.height = height;
         this.direction = direction;
-        this.index = index;
         this.element = null;
-
-        this.createDomElement();
     }
 
     createDomElement () {
         const gameBoard = document.getElementById("game-board");
         this.element = document.createElement("div");
-        this.element.classList.add("segment");
         this.element.style.width = this.width + "px";
         this.element.style.height = this.height + "px";
-        this.element.style.left = this.coordinateX * this.width + "px";
-        this.element.style.bottom = this.coordinateY * this.height + "px";
         gameBoard.appendChild(this.element);
     }
 
@@ -182,8 +202,18 @@ export class Segment {
         this.element = null;
     }
 
-    updateUI () {
+    updateUI (role, signature = null) {
         this.element.style.left = this.coordinateX * this.width + "px";
         this.element.style.bottom = this.coordinateY * this.height + "px";
+
+        this.element.className = role;
+
+        if (role === "corner") {
+            const angles = { '1,1': 270, '-1,1': 180, '-1,-1': 90, '1,-1': 0 };
+            this.element.style.transform = `rotate(${angles[signature]}deg)`;
+        } else {
+            const angles = { 'right': 0, 'down': 90, 'left': 180, 'up': 270 };
+            this.element.style.transform = `rotate(${angles[this.direction]}deg)`;
+        } 
     }
 }

@@ -27,7 +27,7 @@ Today's Goals:
 
 
 
-*** Wednesday  March 4th ***
+*** Wednesday March 4th ***
 
 Today's Goals:
     0. Refactor
@@ -46,12 +46,33 @@ Today's Goals:
     3. Implement restart on gameover
         a) #TODO: Create gameover overlay and hide it by default (✅)
         b) #TODO: Make overlay appear on gameover (✅)
+            b.1) #TODO: Fix score not updating on gameover overlay (✅)
         c) #TODO: Make button restart game when clicked (✅)
 
     4. Implement personal best
-        a) #TODO: Add personal best display to board (📍)
-        a) #TODO: Update personal best on gameover if beaten
-        b) #TODO: Show the personal best was beaten (if so) on gameover
+        a) #TODO: Add personal best display to board (✅)
+        a) #TODO: Update personal best on gameover if beaten (✅)
+        b) #TODO: Show the personal best was beaten (if so) on gameover 
+
+
+
+*** Thursday March 5th ***
+
+Today's Goals:
+    1. Define the visual style of the game
+        a) #TODO: Set assets for head, segment and tail (✅)
+        b) #TODO: Set color palette (✅)
+        c) #TODO: Set font (✅)
+
+    2. Make edible appear outside of snake route
+        a) #TODO: Assure the new edible position does not collide with snake
+
+    3. Make snake go faster
+        a) #TODO: Make snake go 1.1 faster every time it eats 5 edibles
+
+    4. Add game sounds:
+        a) #TODO: Add a sound for when the snake eats an edible
+
 
 
 

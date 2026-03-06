@@ -49,19 +49,22 @@ class Game {
         this.pbDisplay.innerText = `${this.personalBest}`;
 
         let coordinateX = 5;
-        const coordinateY = Math.floor(this.boardHeight / 25 / 2);
+        const coordinateY = Math.floor(this.boardHeight / this.segmentHeight / 2);
+        const edibleX = Math.floor(this.boardWidth / this.segmentWidth) - 5;
         
-        const head = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, "right", 0);
+        const head = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, "right");
         
         this.snake = new Snake(head);
-        this.edible = new Edible(coordinateX + 15, coordinateY, this.segmentWidth, this.segmentHeight);
+        this.edible = new Edible(edibleX, coordinateY, this.segmentWidth, this.segmentHeight);
 
         for (let i = 0; i<2; i++) {
             coordinateX--;
 
-            let newSegment = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, null, i+1);
+            let newSegment = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, "right");
             this.snake.addSegment(newSegment);
         }
+
+        this.snake.draw();
 
         this.ready = true;
     }
@@ -155,7 +158,7 @@ class Game {
     }
 }
 
-const game = new Game(600, 600, 25, 25);
+const game = new Game(600, 600, 30, 30);
 
 const replayButton = document.getElementById("replay-button");
 
@@ -164,9 +167,6 @@ replayButton.addEventListener("click", (event) => {
 })
 
 document.addEventListener("keydown", (event) => {
-    console.log("still listening");
-    console.log("game interval", game.interval);
-    
     if (
         (event.code === "ArrowUp" ||
         event.code === "ArrowRight" || 

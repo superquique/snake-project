@@ -6,27 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div id="board-header">
-        <div>
-            <span id="score-display">0</span>
+        <div class="score-container">
+            <img src="./assets/images/edible.png" alt="Edible image"> <span id="score-display">0</span>
         </div>
-        <div>
-            PB <span id="pb-display">0</span>
+        <div class="score-container">
+            <img src="./assets/images/personal-best.png" alt="Edible image"> <span id="pb-display">0</span>
         </div>
     </div>
-    <div id="game-board">
+    <div id="game-board" class="checkerboard">
         
     </div>
 
     <div id="gameover-overlay" class="hidden">
         <div id="gameover-content">
-            <h2>Gameover</h2>
-            <p>Score <span id="score-display-gameover">0</span></p>
-            <p>PB <span id="pb-display-gameover">0</span></p>
-            <button id="replay-button">Replay</button>
+            <h2>GAME OVER</h2>
+            <div class="score-container"><img src="./assets/images/edible.png" alt="Edible image"> <span id="score-display-gameover">0</span></div>
+            <div class="score-container"> <img src="./assets/images/personal-best.png" alt="Edible image"><span id="pb-display-gameover">0</span></div>
+            <a href="" id="replay-button">Replay</a>
         </div>
     </div>
 
