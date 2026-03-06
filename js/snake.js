@@ -81,6 +81,16 @@ export class Snake {
            
     }
 
+    isCollidingWithAnySegment (coordinateX, coordinateY) {
+        for (const segment of this.segments) {
+            if (segment.coordinateX === coordinateX && segment.coordinateY === coordinateY) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     isCollidingWith (coordinateX, coordinateY) {
         return this.isCollidingWithX(coordinateX) && this.isCollidingWithY(coordinateY); 
     }

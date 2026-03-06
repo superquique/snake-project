@@ -17,7 +17,7 @@ class Game {
         this.pbDisplay = null;
         this.interval = null;
         this.ready = false;
-
+        this.allCoordinates = [];
         this.initializeGame();
     }
 
@@ -49,8 +49,11 @@ class Game {
         this.pbDisplay.innerText = `${this.personalBest}`;
 
         let coordinateX = 5;
-        const coordinateY = Math.floor(this.boardHeight / this.segmentHeight / 2);
-        const edibleX = Math.floor(this.boardWidth / this.segmentWidth) - 5;
+        const boardHeightSquares = this.boardHeight / this.segmentHeight;
+        const boardWidthSquares = this.boardWidth / this.segmentWidth;
+        
+        const coordinateY = Math.floor(boardHeightSquares / 2);
+        const edibleX = Math.floor(boardWidthSquares) - 5;
         
         const head = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, "right");
         
@@ -62,6 +65,14 @@ class Game {
 
             let newSegment = new Segment(coordinateX, coordinateY, this.segmentWidth, this.segmentHeight, "right");
             this.snake.addSegment(newSegment);
+        }
+
+        // Calculate all board coordinates
+        for (let i = 0; i < boardWidthSquares; i++) {
+            for (let j = 0; j < boardWidthSquares; j++) {
+                const coordinate = {x: i, y: j};
+                this.allCoordinates.push(coordinate);
+            }
         }
 
         this.snake.draw();
@@ -124,11 +135,14 @@ class Game {
                 this.augmentScore();
 
                 // Change edible position
-                const newCoordinateX = Math.floor(Math.random() * this.boardWidth/this.segmentWidth);
-                const newCoordinateY = Math.floor(Math.random() * this.boardHeight/this.segmentHeight);
+                const emptySpots = this.allCoordinates.filter(
+                    coord => !this.snake.isCollidingWithAnySegment(coord.x, coord.y)
+                )
+         
+                const newCoordinates = emptySpots[Math.floor(Math.random() * emptySpots.length)];
 
-                this.edible.coordinateX = newCoordinateX;
-                this.edible.coordinateY = newCoordinateY;
+                this.edible.coordinateX = newCoordinates.x;
+                this.edible.coordinateY = newCoordinates.y;
 
                 // Update game UI state
                 this.updateUI();
