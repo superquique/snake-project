@@ -138,7 +138,7 @@ class Game {
 
             // Change game speed
             const speedDiff = Math.floor(this.score / 5);
-            this.speed = Math.max(this.baseSpeed + speedDiff * 0.5, this.maxSpeed);
+            this.speed = Math.min(this.baseSpeed + speedDiff * 0.5, this.maxSpeed);
         }
     }
 

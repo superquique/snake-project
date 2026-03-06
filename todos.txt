@@ -65,7 +65,7 @@ Today's Goals:
         c) #TODO: Set font (✅)
 
     2. Make edible appear outside of snake route
-        a) #TODO: Assure the new edible position does not collide with snake
+        a) #TODO: Assure the new edible position does not collide with snake (✅)
 
     3. Make snake go faster
         a) #TODO: Make snake go 1.1 faster every time it eats 5 edibles
@@ -74,7 +74,20 @@ Today's Goals:
         a) #TODO: Add a sound for when the snake eats an edible
 
 
+*** Friday March 6th ***
 
+Today's Goals:
+    0. Fix bug on replay
+        a) #TODO: There is a bug making the whole page reload when user clicks on Replay (✅)
+
+    1. Fix bug after game over
+        a) #TODO: You can move the snake after loosing by pressing the arrow keys (✅)
+
+    2. Add README file
+        a) #TODO: Make README file following the example
+
+    3. Prepare presentation
+        a) #TODO: Prepare slides by following proposed guide
 
 Feedback comments: 
     1. Refactor turning functions
