@@ -11,6 +11,7 @@ class Game {
         this.segmentHeight = segmentHeight;
         this.score = 0;
         this.personalBest = 0;
+        this.speed = 5;
         this.snake = null;
         this.edible = null;
         this.scoreDisplay = null;
@@ -18,6 +19,8 @@ class Game {
         this.interval = null;
         this.ready = false;
         this.allCoordinates = [];
+        this.lastTime = 0;
+        this.animationRequestID = null;
         this.initializeGame();
     }
 
@@ -151,6 +154,76 @@ class Game {
         }, 120);
     }
 
+    updateState () {
+        // Detect collisions with other segments
+        let collisionDetected = false;
+
+        const allSnakeSegments = this.snake.segments;
+
+        // Detect collisions with itself
+        for (let i = 1; i < allSnakeSegments.length; i++) {
+            const currentSegment = allSnakeSegments[i];
+            if (this.snake.willCollideWith(currentSegment.coordinateX, currentSegment.coordinateY)) {
+                collisionDetected = true;
+                break;
+            }
+        }
+
+        // Detect collisions with board boundaries
+        if (this.snake.willCollideWithX(this.boardWidth/this.segmentWidth)) {
+            collisionDetected = true;
+        } else if (this.snake.willCollideWithX(-1)) {
+            collisionDetected = true;
+        } else if(this.snake.willCollideWithY(this.boardHeight/this.segmentHeight)) {
+            collisionDetected = true;
+        } else if (this.snake.willCollideWithY(-1)) {
+            collisionDetected = true;
+        } else {
+            this.snake.advance();
+        }
+
+        // Gameover on collision detection
+        if (collisionDetected) {
+            this.gameOver();
+        }
+
+        // Detect collisions with edible
+        if (this.snake.isCollidingWith(this.edible.coordinateX, this.edible.coordinateY)) {
+            
+            // Make snake grow one segment
+            this.growSnake();
+
+            // Update score
+            this.augmentScore();
+
+            // Change edible position
+            const emptySpots = this.allCoordinates.filter(
+                coord => !this.snake.isCollidingWithAnySegment(coord.x, coord.y)
+            )
+        
+            const newCoordinates = emptySpots[Math.floor(Math.random() * emptySpots.length)];
+
+            this.edible.coordinateX = newCoordinates.x;
+            this.edible.coordinateY = newCoordinates.y;
+        }
+    }
+
+    gameOver () {
+        console.log(this.animationRequestID);
+        window.cancelAnimationFrame(this.animationRequestID);
+        this.animationRequestID = null;
+        this.ready = false;
+        
+        const scoreDisplayGameover = document.getElementById("score-display-gameover");
+        scoreDisplayGameover.innerText = this.score;
+
+        const pbDisplayGameover = document.getElementById("pb-display-gameover");
+        pbDisplayGameover.innerText = this.personalBest;
+
+        const gameoverOverlay = document.getElementById("gameover-overlay");
+        gameoverOverlay.classList.remove("hidden");
+    }
+
     augmentScore (points = 1) {
         this.score++;
 
@@ -172,6 +245,22 @@ class Game {
     }
 }
 
+function gameLoop (currentTime) {
+    game.animationRequestID = window.requestAnimationFrame(gameLoop);
+
+    // Calculate seconds since last loop
+    const secondsSiceLastRender = (currentTime - game.lastTime) / 1000;
+
+    if (secondsSiceLastRender < 1 / game.speed) {
+        return;
+    }
+
+    game.lastTime = currentTime;
+
+    game.updateState();
+    game.updateUI();
+}
+
 const game = new Game(600, 600, 30, 30);
 
 const replayButton = document.getElementById("replay-button");
@@ -184,8 +273,8 @@ document.addEventListener("keydown", (event) => {
     if (
         (event.code === "ArrowUp" ||
         event.code === "ArrowRight" || 
-        event.code === "ArrowDown") && game.interval === null && game.ready) {
-        game.start();
+        event.code === "ArrowDown") && game.animationRequestID === null && game.ready) {
+        game.animationRequestID = window.requestAnimationFrame(gameLoop);
     }
 
     if (event.code === "ArrowRight") {
